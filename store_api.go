@@ -186,7 +186,7 @@ type SegmentLoc struct {
 }
 
 // TotOps returns number of ops in a segment loc.
-func (sloc *SegmentLoc) TotOps() int { return int(sloc.KvsBytes / 8 / 2) }
+func (sloc *SegmentLoc) TotOps() int { _ = "STUB: not implemented"; return 0 }
 
 // --------------------------------------------------------
 
@@ -194,30 +194,15 @@ func (sloc *SegmentLoc) TotOps() int { return int(sloc.KvsBytes / 8 / 2) }
 type SegmentLocs []SegmentLoc
 
 // AddRef increases the ref count on each SegmentLoc in this SegmentLocs
-func (slocs SegmentLocs) AddRef() {
-	for _, sloc := range slocs {
-		if sloc.mref != nil {
-			sloc.mref.AddRef()
-		}
-	}
-}
+func (slocs SegmentLocs) AddRef() { _ = "STUB: not implemented"; return }
 
 // DecRef decreases the ref count on each SegmentLoc in this SegmentLocs
-func (slocs SegmentLocs) DecRef() {
-	for _, sloc := range slocs {
-		if sloc.mref != nil {
-			sloc.mref.DecRef()
-		}
-	}
-}
+func (slocs SegmentLocs) DecRef() { _ = "STUB: not implemented"; return }
 
 // Close allows the SegmentLocs to implement the io.Closer interface.
 // It actually just performs what should be the final DecRef() call
 // which takes the reference count to 0.
-func (slocs SegmentLocs) Close() error {
-	slocs.DecRef()
-	return nil
-}
+func (slocs SegmentLocs) Close() error { _ = "STUB: not implemented"; return nil }
 
 // --------------------------------------------------------
 
@@ -245,75 +230,42 @@ var SegmentPersisters = map[string]SegmentPersisterFunc{}
 // OpenStore returns a store instance for a directory.  An empty
 // directory results in an empty store.
 func OpenStore(dir string, options StoreOptions) (*Store, error) {
-	return openStore(dir, options)
+	_ = "STUB: not implemented"
+	return nil, nil
+
+	// Dir returns the directory for this store
 }
 
-// Dir returns the directory for this store
 func (s *Store) Dir() string {
-	return s.dir
+	_ = "STUB: not implemented"
+
+	// Options a copy of this Store's StoreOptions
+	return ""
 }
 
-// Options a copy of this Store's StoreOptions
 func (s *Store) Options() StoreOptions {
-	return *s.options // Copy.
+	_ = "STUB: not implemented"
+	// Copy.
+	return *new(StoreOptions)
 }
 
 // Snapshot creates a Snapshot to access this Store
-func (s *Store) Snapshot() (Snapshot, error) {
-	return s.snapshot()
-}
+func (s *Store) Snapshot() (Snapshot, error) { _ = "STUB: not implemented"; return *new(Snapshot), nil }
 
-func (s *Store) snapshot() (*Footer, error) {
-	s.m.Lock()
-	footer := s.footer
-	if footer != nil {
-		footer.AddRef()
-	}
-	s.m.Unlock()
-	return footer, nil
-}
+func (s *Store) snapshot() (*Footer, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // AddRef increases the ref count on this store
-func (s *Store) AddRef() {
-	s.m.Lock()
-	s.refs++
-	s.m.Unlock()
-}
+func (s *Store) AddRef() { _ = "STUB: not implemented"; return }
 
 // Close decreases the ref count on this store, and if the count is 0
 // proceeds to actually close the store.
-func (s *Store) Close() error {
-	s.m.Lock()
-	defer s.m.Unlock()
-
-	s.refs--
-	if s.refs > 0 || s.footer == nil {
-		return nil
-	}
-
-	footer := s.footer
-	s.footer = nil
-
-	return footer.Close()
-}
+func (s *Store) Close() error { _ = "STUB: not implemented"; return nil }
 
 // CloseEx provides more advanced closing options.
-func (s *Store) CloseEx(options StoreCloseExOptions) error {
-	if options.Abort {
-		close(s.abortCh)
-	}
-	return s.Close()
-}
+func (s *Store) CloseEx(options StoreCloseExOptions) error { _ = "STUB: not implemented"; return nil }
 
 // IsAborted returns whether the store operations are aborted.
-func (s *Store) IsAborted() bool {
-	select {
-	case <-s.abortCh:
-		return true
-	default:
-		return false
-	}
-}
+func (s *Store) IsAborted() bool { _ = "STUB: not implemented"; return false }
 
 // --------------------------------------------------------
 
@@ -323,7 +275,8 @@ func (s *Store) IsAborted() bool {
 // directly MUST invoke it in single threaded manner only.
 func (s *Store) Persist(higher Snapshot, persistOptions StorePersistOptions) (
 	Snapshot, error) {
-	return s.persist(higher, persistOptions)
+	_ = "STUB: not implemented"
+	return *new(Snapshot), nil
 }
 
 // --------------------------------------------------------
@@ -334,18 +287,8 @@ func (s *Store) Persist(higher Snapshot, persistOptions StorePersistOptions) (
 // collection should be closed by the caller when done.
 func OpenStoreCollection(dir string, options StoreOptions,
 	persistOptions StorePersistOptions) (*Store, Collection, error) {
-	store, err := OpenStore(dir, options)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	coll, err := store.OpenCollection(options, persistOptions)
-	if err != nil {
-		store.Close()
-		return nil, nil, err
-	}
-
-	return store, coll, nil
+	_ = "STUB: not implemented"
+	return nil, *new(Collection), nil
 }
 
 // --------------------------------------------------------
@@ -355,7 +298,8 @@ func OpenStoreCollection(dir string, options StoreOptions,
 // read/write work.
 func (s *Store) OpenCollection(options StoreOptions,
 	persistOptions StorePersistOptions) (Collection, error) {
-	return s.openCollection(options, persistOptions)
+	_ = "STUB: not implemented"
+	return *new(Collection), nil
 }
 
 // --------------------------------------------------------
@@ -367,7 +311,8 @@ func (s *Store) OpenCollection(options StoreOptions,
 // means no previous snapshot is available.  Of note, store
 // compactions will trim previous history from a store.
 func (s *Store) SnapshotPrevious(ss Snapshot) (Snapshot, error) {
-	return s.snapshotPrevious(ss)
+	_ = "STUB: not implemented"
+	return *new(Snapshot), nil
 }
 
 // --------------------------------------------------------
@@ -388,6 +333,4 @@ func (s *Store) SnapshotPrevious(ss Snapshot) (Snapshot, error) {
 // especially w.r.t. compactions.  For example, navigate back to an
 // older snapshot X via SnapshotPrevious().  Then, do a full
 // compaction.  Then, SnapshotRevert(X) will give an error.
-func (s *Store) SnapshotRevert(revertTo Snapshot) error {
-	return s.snapshotRevert(revertTo)
-}
+func (s *Store) SnapshotRevert(revertTo Snapshot) error { _ = "STUB: not implemented"; return nil }

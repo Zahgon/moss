@@ -6,29 +6,18 @@
 //  software will be governed by the Apache License, Version 2.0, included in
 //  the file licenses/APL2.txt.
 
+//go:build !safe
 // +build !safe
 
 package moss
-
-import (
-	"reflect"
-	"unsafe"
-)
 
 // Uint64SliceToByteSlice gives access to []uint64 as []byte.  By
 // default, an efficient O(1) implementation of this function is used,
 // but which requires the unsafe package.  See the "safe" build tag to
 // use an O(N) implementation that does not need the unsafe package.
 func Uint64SliceToByteSlice(in []uint64) ([]byte, error) {
-	inHeader := (*reflect.SliceHeader)(unsafe.Pointer(&in))
-
-	var out []byte
-	outHeader := (*reflect.SliceHeader)(unsafe.Pointer(&out))
-	outHeader.Data = inHeader.Data
-	outHeader.Len = inHeader.Len * 8
-	outHeader.Cap = inHeader.Cap * 8
-
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ByteSliceToUint64Slice gives access to []byte as []uint64.  By
@@ -36,23 +25,13 @@ func Uint64SliceToByteSlice(in []uint64) ([]byte, error) {
 // but which requires the unsafe package.  See the "safe" build tag to
 // use an O(N) implementation that does not need the unsafe package.
 func ByteSliceToUint64Slice(in []byte) ([]uint64, error) {
-	inHeader := (*reflect.SliceHeader)(unsafe.Pointer(&in))
-
-	var out []uint64
-	outHeader := (*reflect.SliceHeader)(unsafe.Pointer(&out))
-	outHeader.Data = inHeader.Data
-	outHeader.Len = inHeader.Len / 8
-	outHeader.Cap = outHeader.Len
-
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // --------------------------------------------------------------
 
-func endian() string { // See golang-nuts / how-to-tell-endian-ness-of-machine,
-	var x uint32 = 0x01020304
-	if *(*byte)(unsafe.Pointer(&x)) == 0x01 {
-		return "big"
-	}
-	return "little"
+func endian() string {
+	_ = "STUB: not implemented" // See golang-nuts / how-to-tell-endian-ness-of-machine,
+	return ""
 }

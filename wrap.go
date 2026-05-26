@@ -25,47 +25,17 @@ type SnapshotWrapper struct {
 // around a snapshot.  The snapshot (and an optional io.Closer) will
 // be closed when the ref-count reaches zero.
 func NewSnapshotWrapper(ss Snapshot, closer io.Closer) *SnapshotWrapper {
-	if ss == nil {
-		return nil
-	}
-
-	return &SnapshotWrapper{refCount: 1, ss: ss, closer: closer}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (w *SnapshotWrapper) addRef() *SnapshotWrapper {
-	if w != nil {
-		w.m.Lock()
-		w.refCount++
-		w.m.Unlock()
-	}
+func (w *SnapshotWrapper) addRef() *SnapshotWrapper { _ = "STUB: not implemented"; return nil }
 
-	return w
-}
-
-func (w *SnapshotWrapper) decRef() (err error) {
-	w.m.Lock()
-	w.refCount--
-	if w.refCount <= 0 {
-		if w.ss != nil {
-			err = w.ss.Close()
-			w.ss = nil
-		}
-		if w.closer != nil {
-			w.closer.Close()
-			w.closer = nil
-		}
-	}
-	w.m.Unlock()
-	return err
-}
+func (w *SnapshotWrapper) decRef() (err error) { _ = "STUB: not implemented"; return nil }
 
 // ChildCollectionNames returns an array of child collection name strings.
 func (w *SnapshotWrapper) ChildCollectionNames() ([]string, error) {
-	w.m.Lock()
-	defer w.m.Unlock()
-	if w.ss != nil {
-		return w.ss.ChildCollectionNames()
-	}
+	_ = "STUB: not implemented"
 	return nil, nil
 }
 
@@ -73,23 +43,22 @@ func (w *SnapshotWrapper) ChildCollectionNames() ([]string, error) {
 // collection by its name.
 func (w *SnapshotWrapper) ChildCollectionSnapshot(childCollectionName string) (
 	Snapshot, error) {
-	w.m.Lock()
-	defer w.m.Unlock()
-	if w.ss != nil {
-		return w.ss.ChildCollectionSnapshot(childCollectionName)
-	}
-	return nil, nil
+	_ = "STUB: not implemented"
+	return *new(Snapshot), nil
 }
 
 // Close will decRef the underlying snapshot.
 func (w *SnapshotWrapper) Close() (err error) {
-	return w.decRef()
+	_ = "STUB: not implemented"
+
+	// Get returns the key from the underlying snapshot.
+	return nil
 }
 
-// Get returns the key from the underlying snapshot.
 func (w *SnapshotWrapper) Get(key []byte, readOptions ReadOptions) (
 	[]byte, error) {
-	return w.ss.Get(key, readOptions)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // StartIterator initiates a start iterator over the underlying snapshot.
@@ -97,6 +66,6 @@ func (w *SnapshotWrapper) StartIterator(
 	startKeyInclusive, endKeyExclusive []byte,
 	iteratorOptions IteratorOptions,
 ) (Iterator, error) {
-	return w.ss.StartIterator(startKeyInclusive, endKeyExclusive,
-		iteratorOptions)
+	_ = "STUB: not implemented"
+	return *new(Iterator), nil
 }

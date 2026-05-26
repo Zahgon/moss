@@ -24,54 +24,12 @@ type mmapRef struct {
 	ext  interface{} // Extra user/associated data.
 }
 
-func (r *mmapRef) AddRef() *mmapRef {
-	if r == nil {
-		return nil
-	}
+func (r *mmapRef) AddRef() *mmapRef { _ = "STUB: not implemented"; return nil }
 
-	r.m.Lock()
-	r.refs++
-	r.m.Unlock()
+func (r *mmapRef) DecRef() error { _ = "STUB: not implemented"; return nil }
 
-	return r
-}
+func (r *mmapRef) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (r *mmapRef) DecRef() error {
-	if r == nil {
-		return nil
-	}
+func (r *mmapRef) SetExt(v interface{}) { _ = "STUB: not implemented"; return }
 
-	r.m.Lock()
-
-	r.refs--
-	if r.refs <= 0 {
-		r.mm.Unmap()
-		r.mm = nil
-
-		r.buf = nil
-
-		r.fref.DecRef()
-		r.fref = nil
-	}
-
-	r.m.Unlock()
-
-	return nil
-}
-
-func (r *mmapRef) Close() error {
-	return r.DecRef()
-}
-
-func (r *mmapRef) SetExt(v interface{}) {
-	r.m.Lock()
-	r.ext = v
-	r.m.Unlock()
-}
-
-func (r *mmapRef) GetExt() (v interface{}) {
-	r.m.Lock()
-	v = r.ext
-	r.m.Unlock()
-	return
-}
+func (r *mmapRef) GetExt() (v interface{}) { _ = "STUB: not implemented"; return nil }

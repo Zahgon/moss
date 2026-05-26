@@ -66,12 +66,10 @@
 // NOTE: the mossStore persistence design does not currently support
 // moving files created on one machine endian'ness type to another
 // machine with a different endian'ness type.
-//
 package moss
 
 import (
 	"errors"
-	"sync"
 	"time"
 
 	"github.com/couchbase/ghistogram"
@@ -629,33 +627,6 @@ type CollectionStats struct {
 // NewCollection returns a new, unstarted Collection instance.
 func NewCollection(options CollectionOptions) (
 	Collection, error) {
-	histograms := make(ghistogram.Histograms)
-	histograms["ExecuteBatchBytes"] =
-		ghistogram.NewNamedHistogram("ExecuteBatchBytes", 10, 4, 4)
-	histograms["ExecuteBatchOpsCount"] =
-		ghistogram.NewNamedHistogram("ExecuteBatchOpsCount", 10, 4, 4)
-	histograms["ExecuteBatchUsecs"] =
-		ghistogram.NewNamedHistogram("ExecuteBatchUsecs", 10, 4, 4)
-	histograms["MergerUsecs"] =
-		ghistogram.NewNamedHistogram("MergerUsecs", 10, 4, 4)
-	histograms["MutationKeyBytes"] =
-		ghistogram.NewNamedHistogram("MutationKeyBytes", 10, 4, 4)
-	histograms["MutationValBytes"] =
-		ghistogram.NewNamedHistogram("MutationValBytes", 10, 4, 4)
-
-	c := &collection{
-		options:            &options,
-		stopCh:             make(chan struct{}),
-		pingMergerCh:       make(chan ping, 10),
-		doneMergerCh:       make(chan struct{}),
-		donePersisterCh:    make(chan struct{}),
-		lowerLevelSnapshot: NewSnapshotWrapper(options.LowerLevelInit, nil),
-		stats:              &CollectionStats{},
-		histograms:         histograms,
-	}
-
-	c.stackDirtyTopCond = sync.NewCond(&c.m)
-	c.stackDirtyBaseCond = sync.NewCond(&c.m)
-
-	return c, nil
+	_ = "STUB: not implemented"
+	return *new(Collection), nil
 }

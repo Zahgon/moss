@@ -17,29 +17,12 @@ type ping struct {
 }
 
 // replyToPings() is a helper function to respond to ping requests.
-func replyToPings(pings []ping) {
-	for _, ping := range pings {
-		if ping.pongCh != nil {
-			close(ping.pongCh)
-			ping.pongCh = nil
-		}
-	}
-}
+func replyToPings(pings []ping) { _ = "STUB: not implemented"; return }
 
 // receivePings() collects any available ping requests, but will not
 // block if there are no incoming ping requests.
 func receivePings(pingCh chan ping, pings []ping,
 	kindMatch string, kindSeen bool) ([]ping, bool) {
-	for {
-		select {
-		case pingVal := <-pingCh:
-			pings = append(pings, pingVal)
-			if pingVal.kind == kindMatch {
-				kindSeen = true
-			}
-
-		default:
-			return pings, kindSeen
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil, false
 }

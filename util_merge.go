@@ -22,30 +22,18 @@ type MergeOperatorStringAppend struct {
 }
 
 // Name returns the name of this merge operator implemenation
-func (mo *MergeOperatorStringAppend) Name() string {
-	return "MergeOperatorStringAppend"
-}
+func (mo *MergeOperatorStringAppend) Name() string { _ = "STUB: not implemented"; return "" }
 
 // FullMerge performs the full merge of a string append operation
 func (mo *MergeOperatorStringAppend) FullMerge(key, existingValue []byte,
 	operands [][]byte) ([]byte, bool) {
-	mo.m.Lock()
-	mo.numFull++
-	mo.m.Unlock()
-
-	s := string(existingValue)
-	for _, operand := range operands {
-		s = s + mo.Sep + string(operand)
-	}
-	return []byte(s), true
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 // PartialMerge performs the partial merge of a string append operation
 func (mo *MergeOperatorStringAppend) PartialMerge(key,
 	leftOperand, rightOperand []byte) ([]byte, bool) {
-	mo.m.Lock()
-	mo.numPartial++
-	mo.m.Unlock()
-
-	return []byte(string(leftOperand) + mo.Sep + string(rightOperand)), true
+	_ = "STUB: not implemented"
+	return nil, false
 }

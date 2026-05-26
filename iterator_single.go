@@ -9,7 +9,6 @@
 package moss
 
 import (
-	"bytes"
 	"io"
 )
 
@@ -33,115 +32,31 @@ type iteratorSingle struct {
 }
 
 // Close must be invoked to release resources.
-func (iter *iteratorSingle) Close() error {
-	if iter.closer != nil {
-		iter.closer.Close()
-		iter.closer = nil
-	}
-
-	return nil
-}
+func (iter *iteratorSingle) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (iter *iteratorSingle) InitCloser(closer io.Closer) error {
-	if iter.closer != nil {
-		return ErrAlreadyInitialized
-	}
-	iter.closer = closer
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Next returns ErrIteratorDone if the iterator is done.
-func (iter *iteratorSingle) Next() error {
-	err := iter.sc.Next()
-	if err != nil {
-		iter.op = 0
-		iter.k = nil
-		iter.v = nil
+func (iter *iteratorSingle) Next() error { _ = "STUB: not implemented"; return nil }
 
-		// we DO want to return ErrIteratorDone here
-		return err
-	}
+// we DO want to return ErrIteratorDone here
 
-	iter.op, iter.k, iter.v = iter.sc.Current()
-	if iter.op != OperationDel ||
-		iter.iteratorOptions.IncludeDeletions {
-		return nil
-	}
+func (iter *iteratorSingle) SeekTo(seekToKey []byte) error { _ = "STUB: not implemented"; return nil }
 
-	return iter.Next()
-}
+// Try a loop of naive Next()'s for several attempts.
 
-func (iter *iteratorSingle) SeekTo(seekToKey []byte) error {
-	key, _, err := iter.Current()
-	if err != nil && err != ErrIteratorDone {
-		return err
-	}
-
-	if key != nil {
-		cmp := bytes.Compare(seekToKey, key)
-		if cmp == 0 {
-			return nil
-		}
-
-		if cmp > 0 {
-			// Try a loop of naive Next()'s for several attempts.
-			err = naiveSeekTo(iter, seekToKey, DefaultNaiveSeekToMaxTries)
-			if err != ErrMaxTries {
-				return err
-			}
-		}
-	}
-
-	iter.op = 0
-	iter.k = nil
-	iter.v = nil
-
-	err = iter.sc.Seek(seekToKey)
-	if err != nil {
-		// we DO want to return ErrIteratorDone here
-		return err
-	}
-
-	iter.op, iter.k, iter.v = iter.sc.Current()
-	if !iter.iteratorOptions.IncludeDeletions &&
-		iter.op == OperationDel {
-		return iter.Next()
-	}
-
-	return nil
-}
+// we DO want to return ErrIteratorDone here
 
 // Current returns ErrIteratorDone if the iterator is done.
 // Otherwise, Current() returns the current key and val, which should
 // be treated as immutable or read-only.  The key and val bytes will
 // remain available until the next call to Next() or Close().
 func (iter *iteratorSingle) Current() ([]byte, []byte, error) {
-	if iter.op == 0 {
-		return nil, nil, ErrIteratorDone
-	}
-
-	if iter.op == OperationDel {
-		return nil, nil, nil
-	}
-
-	if iter.op == OperationMerge {
-		var mo MergeOperator
-		if iter.options != nil {
-			mo = iter.options.MergeOperator
-		}
-		if mo == nil {
-			return iter.k, nil, ErrMergeOperatorNil
-		}
-
-		vMerged, ok := mo.FullMerge(iter.k, nil, [][]byte{iter.v})
-		if !ok {
-			return iter.k, nil, ErrMergeOperatorFullMergeFailed
-		}
-
-		return iter.k, vMerged, nil
-	}
-
-	return iter.k, iter.v, nil
+	_ = "STUB: not implemented"
+	return nil, nil, nil
 }
 
 // CurrentEx is a more advanced form of Current() that returns more
@@ -149,9 +64,6 @@ func (iter *iteratorSingle) Current() ([]byte, []byte, error) {
 // Otherwise, the current operation, key, val are returned.
 func (iter *iteratorSingle) CurrentEx() (
 	entryEx EntryEx, key, val []byte, err error) {
-	if iter.op == 0 {
-		return EntryEx{}, nil, nil, ErrIteratorDone
-	}
-
-	return EntryEx{Operation: iter.op}, iter.k, iter.v, nil
+	_ = "STUB: not implemented"
+	return *new(EntryEx), nil, nil, nil
 }
